@@ -1938,6 +1938,7 @@ footer {
 
     header {
         padding: var(--space-4) 0;
+        position: relative;
     }
 
     .hero {
