@@ -15,21 +15,34 @@ const mg = mailgun({
  */
 router.post('/send-email', async (req, res) => {
     try {
-        const { name, email, phone, service, message } = req.body;
+        const { name, email, phone, service, message, suburb, vehicleType, timing, notes } = req.body;
 
-        // Validate required fields
-        if (!name || !email || !message) {
-            return res.status(400).json({ 
-                error: 'Name, email, and message are required' 
-            });
-        }
+        // Determine if this is a blue slip quote or general contact
+        const isBlueSlipQuote = suburb && vehicleType;
 
-        // Validate email format
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email)) {
-            return res.status(400).json({ 
-                error: 'Invalid email format' 
-            });
+        // Validate required fields based on form type
+        if (isBlueSlipQuote) {
+            // Blue slip quote form validation
+            if (!name || !phone || !suburb || !vehicleType) {
+                return res.status(400).json({
+                    error: 'Name, phone, suburb, and vehicle type are required'
+                });
+            }
+        } else {
+            // General contact form validation
+            if (!name || !email || !message) {
+                return res.status(400).json({
+                    error: 'Name, email, and message are required'
+                });
+            }
+
+            // Validate email format
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                return res.status(400).json({
+                    error: 'Invalid email format'
+                });
+            }
         }
 
         // Build email HTML content
@@ -40,24 +53,56 @@ router.post('/send-email', async (req, res) => {
                 <style>
                     body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
                     .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-                    .header { background: #2563eb; color: white; padding: 20px; border-radius: 5px 5px 0 0; }
+                    .header { background: #0F52BA; color: white; padding: 20px; border-radius: 5px 5px 0 0; }
                     .content { background: #f9fafb; padding: 30px; border: 1px solid #e5e7eb; }
                     .field { margin-bottom: 20px; }
                     .label { font-weight: bold; color: #1f2937; margin-bottom: 5px; }
                     .value { background: white; padding: 10px; border-radius: 4px; border: 1px solid #e5e7eb; }
                     .footer { text-align: center; padding: 20px; color: #6b7280; font-size: 12px; }
+                    .urgent { background: #FEF3C7; border: 1px solid #F59E0B; padding: 15px; border-radius: 4px; margin-top: 20px; }
                 </style>
             </head>
             <body>
                 <div class="container">
                     <div class="header">
-                        <h2 style="margin: 0;">New Contact Form Submission</h2>
+                        <h2 style="margin: 0;">${isBlueSlipQuote ? '🚗 New Blue Slip Quote Request' : 'New Contact Form Submission'}</h2>
                     </div>
                     <div class="content">
                         <div class="field">
                             <div class="label">Name:</div>
                             <div class="value">${name}</div>
                         </div>
+                        ${isBlueSlipQuote ? `
+                        <div class="field">
+                            <div class="label">Phone:</div>
+                            <div class="value"><a href="tel:${phone}">${phone}</a></div>
+                        </div>
+                        <div class="field">
+                            <div class="label">Suburb:</div>
+                            <div class="value">${suburb}</div>
+                        </div>
+                        <div class="field">
+                            <div class="label">Vehicle Type:</div>
+                            <div class="value">${vehicleType}</div>
+                        </div>
+                        ${timing ? `
+                        <div class="field">
+                            <div class="label">Timeframe:</div>
+                            <div class="value">${timing}</div>
+                        </div>
+                        ` : ''}
+                        ${notes ? `
+                        <div class="field">
+                            <div class="label">Additional Notes:</div>
+                            <div class="value">${notes.replace(/\n/g, '<br>')}</div>
+                        </div>
+                        ` : ''}
+                        ${timing === 'today' || timing === 'tomorrow' ? `
+                        <div class="urgent">
+                            <strong>⚡ URGENT:</strong> Customer needs service ${timing}!
+                        </div>
+                        ` : ''}
+                        ` : `
                         <div class="field">
                             <div class="label">Email:</div>
                             <div class="value"><a href="mailto:${email}">${email}</a></div>
@@ -78,9 +123,10 @@ router.post('/send-email', async (req, res) => {
                             <div class="label">Message:</div>
                             <div class="value">${message.replace(/\n/g, '<br>')}</div>
                         </div>
+                        `}
                     </div>
                     <div class="footer">
-                        <p>This email was sent from your website contact form.</p>
+                        <p>This email was sent from your website ${isBlueSlipQuote ? 'quote' : 'contact'} form.</p>
                         <p>Received on ${new Date().toLocaleString()}</p>
                     </div>
                 </div>
@@ -89,7 +135,19 @@ router.post('/send-email', async (req, res) => {
         `;
 
         // Plain text version
-        const textContent = `
+        const textContent = isBlueSlipQuote ? `
+New Blue Slip Quote Request
+
+Name: ${name}
+Phone: ${phone}
+Suburb: ${suburb}
+Vehicle Type: ${vehicleType}
+${timing ? `Timeframe: ${timing}` : ''}
+${notes ? `Notes: ${notes}` : ''}
+
+${timing === 'today' || timing === 'tomorrow' ? `⚡ URGENT: Customer needs service ${timing}!\n` : ''}
+Received on ${new Date().toLocaleString()}
+        ` : `
 New Contact Form Submission
 
 Name: ${name}
@@ -105,63 +163,70 @@ Received on ${new Date().toLocaleString()}
 
         // Email data
         const emailData = {
-            from: `Website Contact Form <noreply@${process.env.MAILGUN_DOMAIN}>`,
+            from: `Blue Slip Sydney <noreply@${process.env.MAILGUN_DOMAIN}>`,
             to: process.env.RECIPIENT_EMAIL,
-            subject: `New Contact Form Submission from ${name}`,
+            subject: isBlueSlipQuote
+                ? `🚗 Blue Slip Quote: ${name} - ${suburb} (${vehicleType})${timing === 'today' || timing === 'tomorrow' ? ' - URGENT' : ''}`
+                : `New Contact: ${name}`,
             html: emailContent,
             text: textContent,
-            'h:Reply-To': email
+            'h:Reply-To': isBlueSlipQuote ? undefined : email
         };
 
         // Send email
         await mg.messages().send(emailData);
 
-        // Send auto-reply to customer
-        const autoReplyData = {
-            from: `Your Business <noreply@${process.env.MAILGUN_DOMAIN}>`,
-            to: email,
-            subject: 'Thank you for contacting us',
-            html: `
-                <!DOCTYPE html>
-                <html>
-                <head>
-                    <style>
-                        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
-                        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-                        .header { background: #2563eb; color: white; padding: 20px; text-align: center; }
-                        .content { padding: 30px; background: #f9fafb; }
-                        .footer { text-align: center; padding: 20px; color: #6b7280; font-size: 12px; }
-                    </style>
-                </head>
-                <body>
-                    <div class="container">
-                        <div class="header">
-                            <h2 style="margin: 0;">Thank You for Contacting Us!</h2>
+        // Send auto-reply to customer (only if they provided an email)
+        if (email) {
+            const autoReplyData = {
+                from: `Blue Slip Sydney <noreply@${process.env.MAILGUN_DOMAIN}>`,
+                to: email,
+                subject: 'Thank you for contacting Blue Slip Sydney',
+                html: `
+                    <!DOCTYPE html>
+                    <html>
+                    <head>
+                        <style>
+                            body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+                            .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+                            .header { background: #0F52BA; color: white; padding: 20px; text-align: center; }
+                            .content { padding: 30px; background: #f9fafb; }
+                            .footer { text-align: center; padding: 20px; color: #6b7280; font-size: 12px; }
+                        </style>
+                    </head>
+                    <body>
+                        <div class="container">
+                            <div class="header">
+                                <h2 style="margin: 0;">Thank You for Contacting Blue Slip Sydney!</h2>
+                            </div>
+                            <div class="content">
+                                <p>Hi ${name},</p>
+                                <p>Thank you for reaching out to us. We've received your message and will get back to you as soon as possible.</p>
+                                <p>For urgent inquiries, feel free to call us directly at <strong>(02) 9516 3366</strong> or SMS <strong>0412 785 767</strong>.</p>
+                                <p>Best regards,<br>Blue Slip Sydney Team</p>
+                            </div>
+                            <div class="footer">
+                                <p>This is an automated response. Please do not reply to this email.</p>
+                                <p>63-65 Campbell Street, St Peters NSW 2044</p>
+                            </div>
                         </div>
-                        <div class="content">
-                            <p>Hi ${name},</p>
-                            <p>Thank you for reaching out to us. We've received your message and will get back to you as soon as possible.</p>
-                            <p>In the meantime, feel free to explore our services or give us a call if you have any urgent questions.</p>
-                            <p>Best regards,<br>Your Business Team</p>
-                        </div>
-                        <div class="footer">
-                            <p>This is an automated response. Please do not reply to this email.</p>
-                        </div>
-                    </div>
-                </body>
-                </html>
-            `,
-            text: `Hi ${name},\n\nThank you for reaching out to us. We've received your message and will get back to you as soon as possible.\n\nBest regards,\nYour Business Team`
-        };
+                    </body>
+                    </html>
+                `,
+                text: `Hi ${name},\n\nThank you for reaching out to us. We've received your message and will get back to you as soon as possible.\n\nFor urgent inquiries, call (02) 9516 3366 or SMS 0412 785 767.\n\nBest regards,\nBlue Slip Sydney Team`
+            };
 
-        // Send auto-reply (don't wait for it, send in background)
-        mg.messages().send(autoReplyData).catch(err => {
-            console.error('Auto-reply error:', err);
-        });
+            // Send auto-reply (don't wait for it, send in background)
+            mg.messages().send(autoReplyData).catch(err => {
+                console.error('Auto-reply error:', err);
+            });
+        }
 
-        res.status(200).json({ 
-            message: 'Thank you! Your message has been sent successfully.',
-            success: true 
+        res.status(200).json({
+            message: isBlueSlipQuote
+                ? 'Thank you! We\'ll contact you shortly with your quote.'
+                : 'Thank you! Your message has been sent successfully.',
+            success: true
         });
 
     } catch (error) {

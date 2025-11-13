@@ -11,13 +11,16 @@ class AIChat {
         this.chatInput = document.getElementById('chatInput');
         this.chatMessages = document.getElementById('chatMessages');
         this.apiEndpoint = '/api/chat';
+        this.configEndpoint = '/api/chat/config';
         this.isOpen = false;
         this.conversationHistory = [];
-        
+        this.suggestedQuestions = [];
+        this.hasShownSuggestions = false;
+
         this.init();
     }
 
-    init() {
+    async init() {
         if (!this.chatToggle || !this.chatWindow) {
             console.warn('Chat widget elements not found');
             return;
@@ -26,12 +29,71 @@ class AIChat {
         this.chatToggle.addEventListener('click', () => this.toggleChat());
         this.chatClose.addEventListener('click', () => this.toggleChat());
         this.chatForm.addEventListener('submit', (e) => this.handleSubmit(e));
-        
+
+        // Fetch configuration and suggested questions
+        await this.loadConfig();
+
         // Add welcome message
         this.addMessage('ai', 'Hello! 👋 How can I help you today?');
-        
+
+        // Add suggested questions if available
+        if (this.suggestedQuestions.length > 0 && !this.hasShownSuggestions) {
+            this.showSuggestedQuestions();
+        }
+
         // Close chat when clicking outside
         document.addEventListener('click', (e) => this.handleOutsideClick(e));
+    }
+
+    async loadConfig() {
+        try {
+            const response = await fetch(this.configEndpoint);
+            const config = await response.json();
+
+            if (config.suggestedQuestions && Array.isArray(config.suggestedQuestions)) {
+                this.suggestedQuestions = config.suggestedQuestions;
+            }
+        } catch (error) {
+            console.warn('Could not load chat config:', error);
+            // Continue without suggested questions
+        }
+    }
+
+    showSuggestedQuestions() {
+        if (this.hasShownSuggestions) return;
+
+        const suggestionsDiv = document.createElement('div');
+        suggestionsDiv.className = 'chat-suggestions';
+        suggestionsDiv.id = 'chatSuggestions';
+
+        this.suggestedQuestions.forEach(question => {
+            const btn = document.createElement('button');
+            btn.className = 'suggestion-btn';
+            btn.textContent = question;
+            btn.addEventListener('click', (e) => this.handleSuggestionClick(question, e));
+            suggestionsDiv.appendChild(btn);
+        });
+
+        this.chatMessages.appendChild(suggestionsDiv);
+        this.scrollToBottom();
+        this.hasShownSuggestions = true;
+    }
+
+    handleSuggestionClick(question, event) {
+        // Prevent click from bubbling up to the outside click handler
+        if (event) {
+            event.stopPropagation();
+        }
+
+        // Remove suggestions
+        const suggestionsDiv = document.getElementById('chatSuggestions');
+        if (suggestionsDiv) {
+            suggestionsDiv.remove();
+        }
+
+        // Set input value and submit
+        this.chatInput.value = question;
+        this.chatForm.dispatchEvent(new Event('submit'));
     }
 
     toggleChat() {

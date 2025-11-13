@@ -198,10 +198,20 @@ router.post('/chat', async (req, res) => {
  * Get public chat configuration (optional endpoint)
  */
 router.get('/chat/config', (req, res) => {
+    // Parse suggested questions from environment variable
+    let suggestedQuestions = [];
+    if (process.env.CHAT_SUGGESTED_QUESTIONS) {
+        suggestedQuestions = process.env.CHAT_SUGGESTED_QUESTIONS
+            .split(',')
+            .map(q => q.trim())
+            .filter(q => q.length > 0);
+    }
+
     res.json({
         available: !!process.env.OPENROUTER_API_KEY,
         model: process.env.OPENROUTER_MODEL || 'openai/gpt-3.5-turbo',
-        maxTokens: parseInt(process.env.OPENROUTER_MAX_TOKENS) || 1000
+        maxTokens: parseInt(process.env.OPENROUTER_MAX_TOKENS) || 1000,
+        suggestedQuestions: suggestedQuestions
     });
 });
 

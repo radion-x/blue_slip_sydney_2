@@ -11,18 +11,26 @@
     <!-- Header & Navigation -->
     <header>
         <nav>
-            <div class="container">
-                <div class="logo">Blue Slip Sydney</div>
+            <div class="container nav-container">
+                <div class="logo">
+                    <img src="images/blueskip_sydney_logo.png" alt="Blue Slip Sydney Logo" class="logo-image">
+                </div>
                 <ul class="nav-links">
                     <li><a href="#home">Home</a></li>
                     <li><a href="#how-it-works">How It Works</a></li>
-                    <li><a href="#why-choose-us">Why Choose Us</a></li>
+                    <li><a href="#why-choose-us">Services</a></li>
                     <li><a href="#service-areas">Areas</a></li>
                     <li><a href="#pricing">Pricing</a></li>
                     <li><a href="#faqs">FAQs</a></li>
                 </ul>
                 <div class="nav-cta">
-                    <a href="tel:0295163366" class="phone-number">📞 (02) 9516 3366</a>
+                    <a href="tel:0295163366" class="phone-link">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                        </svg>
+                        <span>(02) 9516 3366</span>
+                    </a>
+                    <a href="#quote-form" class="btn btn-primary btn-sm">Get Quote</a>
                 </div>
                 <button class="mobile-menu-toggle" aria-label="Toggle menu">
                     <span></span>
@@ -35,76 +43,121 @@
 
     <!-- Hero Section -->
     <section id="home" class="hero">
-        <div class="container hero-container">
+        <div class="container">
             <div class="hero-content">
-                <h1>Blue Slip Sydney</h1>
-                <p class="hero-subtitle">Same-Day Service</p>
-                <p class="hero-description">Fast, compliant AUVIS inspections by certified professionals. Get your unregistered vehicle on the road with zero hassle.</p>
+                <div class="hero-badge-top">AUVIS Authorised Inspector</div>
+                <h1>Professional Blue Slip Inspections in Sydney</h1>
+                <p class="hero-subtitle">Same-day service available • Certified inspectors • Fixed pricing</p>
+                <p class="hero-description">Get your unregistered vehicle registered fast with our expert AUVIS inspections. Serving Sydney's Inner West and surrounding areas since 2010.</p>
                 <div class="hero-buttons">
-                    <a href="tel:0295163366" class="btn btn-primary">Call (02) 9516 3366</a>
-                    <a href="sms:+61412785767?&body=Hi%2C%20I%20need%20a%20blue%20slip%20quote.%20My%20suburb%20is%3A%20" class="btn btn-secondary">SMS for Quick Quote</a>
+                    <a href="tel:0295163366" class="btn btn-primary">
+                        <span class="btn-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                        </span>
+                        Call (02) 9516 3366
+                    </a>
+                    <a href="#quote-form" class="btn btn-secondary">Get Free Quote</a>
                 </div>
-                <div class="hero-badges">
-                    <div class="badge">⭐ 4.7/5 from local drivers</div>
-                    <div class="badge">✓ AUVIS authorised</div>
-                    <div class="badge">📍 Sydney-wide</div>
+                <div class="hero-trust">
+                    <div class="trust-item">
+                        <div class="trust-value">4.8★</div>
+                        <div class="trust-label">Google Rating</div>
+                    </div>
+                    <div class="trust-item">
+                        <div class="trust-value">1000+</div>
+                        <div class="trust-label">Inspections</div>
+                    </div>
+                    <div class="trust-item">
+                        <div class="trust-value">Same Day</div>
+                        <div class="trust-label">Available</div>
+                    </div>
                 </div>
             </div>
-            
-            <!-- Quick Quote Form -->
-            <div class="hero-form">
-                <form id="quoteForm" class="quote-form">
-                    <h3>Quick Quote Form</h3>
-                    
-                    <div class="form-group">
-                        <label for="name">Your name *</label>
-                        <input type="text" id="name" name="name" placeholder="John Doe" required>
+        </div>
+    </section>
+
+    <!-- Quote Form Section -->
+    <section id="quote-form" class="quote-section">
+        <div class="container">
+            <div class="quote-wrapper">
+                <div class="quote-intro">
+                    <h2>Get Your Free Quote</h2>
+                    <p>Fill out the form and we'll get back to you within 30 minutes during business hours.</p>
+                    <div class="quote-features">
+                        <div class="quote-feature">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                            <span>No obligation quote</span>
+                        </div>
+                        <div class="quote-feature">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                            <span>Fixed pricing</span>
+                        </div>
+                        <div class="quote-feature">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                            <span>Same-day booking available</span>
+                        </div>
                     </div>
-                    
-                    <div class="form-group">
-                        <label for="phone">Mobile *</label>
-                        <input type="tel" id="phone" name="phone" placeholder="0412 345 678" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="suburb">Your suburb *</label>
-                        <input type="text" id="suburb" name="suburb" placeholder="e.g. St Peters" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="vehicleType">Vehicle type *</label>
-                        <select id="vehicleType" name="vehicleType" required>
-                            <option value="">Select vehicle type</option>
-                            <option value="car">Car/Sedan</option>
-                            <option value="suv">SUV/4WD</option>
-                            <option value="van">Van</option>
-                            <option value="ute">Ute</option>
-                            <option value="motorcycle">Motorcycle</option>
-                            <option value="trailer">Trailer</option>
-                            <option value="other">Other</option>
-                        </select>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="timing">When do you need it?</label>
-                        <select id="timing" name="timing">
-                            <option value="">Select timeframe</option>
-                            <option value="today">Today</option>
-                            <option value="tomorrow">Tomorrow</option>
-                            <option value="this-week">This week</option>
-                            <option value="next-week">Next week</option>
-                            <option value="flexible">Flexible</option>
-                        </select>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="notes">Notes (optional)</label>
-                        <textarea id="notes" name="notes" rows="3" placeholder="Any specific requirements or questions..."></textarea>
-                    </div>
-                    
-                    <button type="submit" class="btn btn-primary btn-block">Get My Quote</button>
-                    <div id="formStatus" class="form-status"></div>
-                </form>
+                </div>
+
+                <div class="quote-form-container">
+                    <form id="quoteForm" class="quote-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="name">Full Name *</label>
+                                <input type="text" id="name" name="name" placeholder="John Smith" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="phone">Phone Number *</label>
+                                <input type="tel" id="phone" name="phone" placeholder="0412 345 678" required>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="suburb">Your Suburb *</label>
+                                <input type="text" id="suburb" name="suburb" placeholder="e.g. St Peters" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="vehicleType">Vehicle Type *</label>
+                                <select id="vehicleType" name="vehicleType" required>
+                                    <option value="">Select type</option>
+                                    <option value="car">Car/Sedan</option>
+                                    <option value="suv">SUV/4WD</option>
+                                    <option value="van">Van</option>
+                                    <option value="ute">Ute</option>
+                                    <option value="motorcycle">Motorcycle</option>
+                                    <option value="trailer">Trailer</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="timing">When do you need it?</label>
+                            <select id="timing" name="timing">
+                                <option value="">Select timeframe</option>
+                                <option value="today">Today</option>
+                                <option value="tomorrow">Tomorrow</option>
+                                <option value="this-week">This week</option>
+                                <option value="next-week">Next week</option>
+                                <option value="flexible">Flexible</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="notes">Additional Notes (Optional)</label>
+                            <textarea id="notes" name="notes" rows="3" placeholder="Any specific requirements or questions..."></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-block">
+                            <span>Get Free Quote</span>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                        </button>
+                        <div id="formStatus" class="form-status"></div>
+                    </form>
+                </div>
             </div>
         </div>
     </section>
@@ -493,6 +546,7 @@
         <div class="container">
             <div class="footer-content">
                 <div class="footer-section">
+                    <img src="images/blueskip_sydney_logo.png" alt="Blue Slip Sydney Logo" class="footer-logo">
                     <h4>Blue Slip Sydney</h4>
                     <p>AUVIS-authorised blue slip inspections for unregistered vehicles in Sydney.</p>
                     <p class="trading-info">Trading name of <strong>Advanced Auto Centre</strong><br>ABN: 13 580 382 185</p>
@@ -528,7 +582,7 @@
     <!-- AI Chat Widget -->
     <div id="aiChatWidget" class="ai-chat-widget">
         <button id="chatToggle" class="chat-toggle" aria-label="Open chat">
-            <span class="chat-icon">💬</span>
+            <span class="chat-icon"></span>
         </button>
         <div id="chatWindow" class="chat-window hidden">
             <div class="chat-header">
