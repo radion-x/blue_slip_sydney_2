@@ -33,18 +33,76 @@
 
     <!-- Hero Section -->
     <section id="home" class="hero">
-        <div class="container">
-            <h1>Blue Slip Sydney</h1>
-            <p class="hero-subtitle">Same-Day Service</p>
-            <p class="hero-description">Fast, compliant AUVIS inspections by certified professionals. Get your unregistered vehicle on the road with zero hassle.</p>
-            <div class="hero-buttons">
-                <a href="tel:0295163366" class="btn btn-primary">Call (02) 9516 3366</a>
-                <a href="sms:+61412785767?&body=Hi%2C%20I%20need%20a%20blue%20slip%20quote.%20My%20suburb%20is%3A%20" class="btn btn-secondary">SMS for Quick Quote</a>
+        <div class="container hero-container">
+            <div class="hero-content">
+                <h1>Blue Slip Sydney</h1>
+                <p class="hero-subtitle">Same-Day Service</p>
+                <p class="hero-description">Fast, compliant AUVIS inspections by certified professionals. Get your unregistered vehicle on the road with zero hassle.</p>
+                <div class="hero-buttons">
+                    <a href="tel:0295163366" class="btn btn-primary">Call (02) 9516 3366</a>
+                    <a href="sms:+61412785767?&body=Hi%2C%20I%20need%20a%20blue%20slip%20quote.%20My%20suburb%20is%3A%20" class="btn btn-secondary">SMS for Quick Quote</a>
+                </div>
+                <div class="hero-badges">
+                    <div class="badge">⭐ 4.7/5 from local drivers</div>
+                    <div class="badge">✓ AUVIS authorised</div>
+                    <div class="badge">📍 Sydney-wide</div>
+                </div>
             </div>
-            <div class="hero-badges">
-                <div class="badge">⭐ 4.7/5 from local drivers</div>
-                <div class="badge">✓ AUVIS authorised</div>
-                <div class="badge">📍 Sydney-wide</div>
+            
+            <!-- Quick Quote Form -->
+            <div class="hero-form">
+                <form id="quoteForm" class="quote-form">
+                    <h3>Quick Quote Form</h3>
+                    
+                    <div class="form-group">
+                        <label for="name">Your name *</label>
+                        <input type="text" id="name" name="name" placeholder="John Doe" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="phone">Mobile *</label>
+                        <input type="tel" id="phone" name="phone" placeholder="0412 345 678" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="suburb">Your suburb *</label>
+                        <input type="text" id="suburb" name="suburb" placeholder="e.g. St Peters" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="vehicleType">Vehicle type *</label>
+                        <select id="vehicleType" name="vehicleType" required>
+                            <option value="">Select vehicle type</option>
+                            <option value="car">Car/Sedan</option>
+                            <option value="suv">SUV/4WD</option>
+                            <option value="van">Van</option>
+                            <option value="ute">Ute</option>
+                            <option value="motorcycle">Motorcycle</option>
+                            <option value="trailer">Trailer</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="timing">When do you need it?</label>
+                        <select id="timing" name="timing">
+                            <option value="">Select timeframe</option>
+                            <option value="today">Today</option>
+                            <option value="tomorrow">Tomorrow</option>
+                            <option value="this-week">This week</option>
+                            <option value="next-week">Next week</option>
+                            <option value="flexible">Flexible</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="notes">Notes (optional)</label>
+                        <textarea id="notes" name="notes" rows="3" placeholder="Any specific requirements or questions..."></textarea>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary btn-block">Get My Quote</button>
+                    <div id="formStatus" class="form-status"></div>
+                </form>
             </div>
         </div>
     </section>

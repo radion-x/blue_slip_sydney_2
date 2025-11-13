@@ -3,18 +3,23 @@
  * Handles contact form submissions and validation
  */
 class FormHandler {
-    constructor() {
-        this.form = document.getElementById('contactForm');
-        this.statusDiv = document.getElementById('formStatus');
-        this.apiEndpoint = '/api/send-email';
-        this.init();
+    constructor(formId = 'contactForm') {
+        this.form = document.getElementById(formId);
+        if (!this.form) {
+            // Try alternative form ID
+            this.form = document.getElementById('quoteForm');
+        }
+        
+        if (this.form) {
+            this.statusDiv = this.form.querySelector('.form-status') || document.getElementById('formStatus');
+            this.apiEndpoint = '/api/send-email';
+            this.init();
+        }
     }
 
     init() {
-        if (this.form) {
-            this.form.addEventListener('submit', (e) => this.handleSubmit(e));
-            this.setupValidation();
-        }
+        this.form.addEventListener('submit', (e) => this.handleSubmit(e));
+        this.setupValidation();
     }
 
     setupValidation() {
